@@ -2,36 +2,43 @@
 #include <stdio.h>
 
 /**
- * infinite_add - Adds two numbers
- * @n1: First number
- * @n2: Second number
- * @r: Buffer to store the result
- * @size_r: Size of buffer r
- * Return: Pointer to result, or 0 if result cannot be stored in r
+ * infinite_add - Adds two numbers.
+ * @n1: The first number to be added.
+ * @n2: The second number to be added.
+ * @r: The buffer to store the result.
+ * @size_r: The size of the buffer.
+ *
+ * Return: A pointer to the result or 0 if the result can not be stored in r.
  */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
 int i, j, k, l, m, sum, carry = 0;
-for (i = 0; n1[i] != '\0'; i++)
+for (i = 0; n1[i]; i++)
 ;
-for (j = 0; n2[j] != '\0'; j++)
-	;
-if (i > size_r || j > size_r || size_r == 0)
+for (j = 0; n2[j]; j++)
+;
+if (i > size_r || j > size_r)
 return (0);
 r[size_r - 1] = '\0';
-for (k = i - 1, l = j - 1, m = size_r - 2; m >= 0; k--, l--, m--)
+for (i--, j--, k = size_r - 2; k >= 0 && (i >= 0 || j >= 0); i--, j--, k--)
 {
 sum = carry;
-if (k >= 0)
-sum += n1[k] - '0';
-if (l >= 0)
-sum += n2[l] - '0';
-if (k < 0 && l < 0 && !sum)
-break;
+if (i >= 0)
+sum += n1[i] - '0';
+if (j >= 0)
+sum += n2[j] - '0';
 carry = sum / 10;
-r[m] = (sum % 10) + '0';
+r[k] = (sum % 10) + '0';
 }
-if (m < 0 || (m == 0 && carry != 0))
+if (carry)
+{
+if (k < 0)
 return (0);
-return (r + m + 1);
+r[k--] = carry + '0';
 }
+for (l = 0, m = k + 1; r[m]; l++, m++)
+r[l] = r[m];
+r[l] = '\0';
+return (r);
+}
+
